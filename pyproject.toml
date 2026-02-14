@@ -8,14 +8,16 @@ version = "0.1.0"
 description = "CLI tool to scrub metadata from common file types"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
-authors = [{ name = "Kaan" }]
+license = { file = "LICENSE" }
+authors = [{ name = "osmankaankars" }]
 keywords = ["metadata", "privacy", "scrub", "exif", "pdf", "docx"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
 
 dependencies = [
@@ -26,8 +28,17 @@ dependencies = [
   "defusedxml>=0.7,<1.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/osmankaankars/metadata-scrubber-tool"
+Issues = "https://github.com/osmankaankars/metadata-scrubber-tool/issues"
+Changelog = "https://github.com/osmankaankars/metadata-scrubber-tool/blob/main/CHANGELOG.md"
+
 [project.optional-dependencies]
 audio = ["mutagen>=1.47,<2.0"]
+dev = [
+  "pytest>=8,<10",
+  "ruff>=0.4,<1.0",
+]
 
 [project.scripts]
 metadata-scrubber = "metadata_scrubber.cli:app"

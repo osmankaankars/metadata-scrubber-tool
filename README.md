@@ -1,17 +1,27 @@
 # Metadata Scrubber Tool
 
-Klasor veya dosya listesi uzerinden calisan, yaygin dosya turlerinden (or: JPG/PNG, PDF, DOCX/XLSX/PPTX) metadata temizleyen bir CLI aracidir.
+[![CI](https://github.com/osmankaankars/metadata-scrubber-tool/actions/workflows/ci.yml/badge.svg)](https://github.com/osmankaankars/metadata-scrubber-tool/actions/workflows/ci.yml)
 
-## Desteklenen Turler (MVP)
+A small CLI tool that removes metadata from common file types before you share them.
 
-- Image: `.jpg/.jpeg`, `.png`, `.tif/.tiff`, `.webp` (EXIF dahil metadata'yi dusurup yeniden yazar; orientation uygulanir)
-- PDF: doc info + XMP metadata best-effort temizlenir (dosya yeniden yazilir)
-- Office OpenXML: `.docx/.xlsx/.pptx` icindeki `docProps/*` parcalari kaldirilir; zip ic timestamp'ler normalize edilir
-- (Opsiyonel) Audio: `.mp3/.flac/.m4a/.mp4/.ogg` (butun tag'ler silinir, `mutagen` ile)
+## Supported Formats (MVP)
 
-Ek olarak (macOS/Linux): cikti dosyalarindaki extended attributes (xattr) best-effort kaldirilir.
+- Images: `.jpg/.jpeg`, `.png`, `.tif/.tiff`, `.webp`
+  - Re-encodes the image without EXIF and other attached metadata
+  - Applies EXIF orientation (so the pixels keep the correct orientation after EXIF is removed)
+- PDF: `.pdf`
+  - Best-effort removal of document info and XMP metadata
+- Office OpenXML: `.docx`, `.xlsx`, `.pptx`
+  - Removes `docProps/*` parts (core/app/custom properties)
+  - Normalizes timestamps inside the ZIP container to reduce timestamp-based metadata
+- Optional audio (requires `mutagen`): `.mp3`, `.flac`, `.m4a/.mp4`, `.ogg`
+  - Removes all tags
 
-## Kurulum
+Also (macOS/Linux): the tool attempts to strip extended attributes (xattr) from output files.
+
+## Install
+
+From source (recommended for development):
 
 ```bash
 python3 -m venv .venv
@@ -20,40 +30,56 @@ python -m pip install -U pip
 pip install -e .
 ```
 
-Opsiyonel (ses dosyalari icin):
+Optional (audio tag removal):
 
 ```bash
 pip install -e '.[audio]'
 ```
 
-## Kullanim
-
-Bir klasoru ciktiya scrub'layarak kopyalar (varsayilan):
+From GitHub:
 
 ```bash
-metadata-scrubber ./DOSYALARIN_OLDUGU_KLASOR --out ./scrubbed
+pip install 'git+https://github.com/osmankaankars/metadata-scrubber-tool.git'
 ```
 
-Ornek (bu repodaki `ornekler/` klasoru):
+## Usage
+
+Default mode is copy-mode: it writes scrubbed copies into an output directory and does not modify your originals.
 
 ```bash
-metadata-scrubber ./ornekler --out ./scrubbed
+metadata-scrubber ./PATH_TO_FILES --out ./scrubbed
 ```
 
-Yerinde (in-place) scrub (riskli):
+In-place mode (risky): modifies files in place. By default it creates a backup next to each file.
 
 ```bash
-metadata-scrubber ./ornek.pdf --in-place --backup-suffix .bak
+metadata-scrubber ./secret.pdf --in-place --backup-suffix .bak
 ```
 
-Dry-run:
+Dry run:
 
 ```bash
-metadata-scrubber ./ornekler --out ./scrubbed --dry-run
+metadata-scrubber ./PATH_TO_FILES --out ./scrubbed --dry-run
 ```
 
-## Notlar
+Copy unsupported file types as-is (no scrubbing):
 
-- Varsayilan davranis: orijinal dosyalara dokunmaz, cikti klasorune temizlenmis kopyalar yazar.
-- Desteklenmeyen dosya turleri varsayilan olarak atlanir (kopyalanmaz).
-- Desteklenmeyen dosyalari da kopyalamak icin: `--copy-unknown`
+```bash
+metadata-scrubber ./PATH_TO_FILES --out ./scrubbed --copy-unknown
+```
+
+Examples folder:
+
+```bash
+metadata-scrubber ./examples --out ./scrubbed
+```
+
+## Notes / Limitations
+
+- Metadata removal is best-effort and format-specific. There is no guarantee that *all* metadata is removed for every file.
+- Content-level data (for example names inside a document body, revision history, embedded attachments, etc.) may still exist.
+- Always validate your output using the tools you trust for your target format.
+
+## License
+
+MIT. See `LICENSE`.
