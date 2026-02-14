@@ -8,6 +8,7 @@ from pathlib import Path
 @dataclass(frozen=True)
 class ScrubOptions:
     normalize_zip_timestamps: bool = True
+    pdf_aggressive: bool = False
 
 
 class Scrubber(ABC):

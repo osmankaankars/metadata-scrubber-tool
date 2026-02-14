@@ -4,17 +4,20 @@
 
 A small CLI tool that removes metadata from common file types before you share them.
 
-## Supported Formats (MVP)
+## Supported Formats
 
 - Images: `.jpg/.jpeg`, `.png`, `.tif/.tiff`, `.webp`
   - Re-encodes the image without EXIF and other attached metadata
   - Applies EXIF orientation (so the pixels keep the correct orientation after EXIF is removed)
 - PDF: `.pdf`
   - Best-effort removal of document info and XMP metadata
+  - Optional: more aggressive mode with `--pdf-aggressive`
 - Office OpenXML: `.docx`, `.xlsx`, `.pptx`
   - Removes `docProps/*` parts (core/app/custom properties)
   - Normalizes timestamps inside the ZIP container to reduce timestamp-based metadata
-- Optional audio (requires `mutagen`): `.mp3`, `.flac`, `.m4a/.mp4`, `.ogg`
+- Video (requires `ffmpeg`): `.mp4`, `.mov`, `.m4v`, `.mkv`, `.avi`, `.webm`
+  - Stream-copy without re-encoding, while dropping container/stream metadata (best-effort)
+- Optional audio (requires `mutagen`): `.mp3`, `.flac`, `.m4a`, `.ogg`
   - Removes all tags
 
 Also (macOS/Linux): the tool attempts to strip extended attributes (xattr) from output files.
@@ -42,6 +45,8 @@ From GitHub:
 pip install 'git+https://github.com/osmankaankars/metadata-scrubber-tool.git'
 ```
 
+Video scrubbing and video verification require `ffmpeg`/`ffprobe`.
+
 ## Usage
 
 Default mode is copy-mode: it writes scrubbed copies into an output directory and does not modify your originals.
@@ -54,6 +59,12 @@ In-place mode (risky): modifies files in place. By default it creates a backup n
 
 ```bash
 metadata-scrubber ./secret.pdf --in-place --backup-suffix .bak
+```
+
+More aggressive PDF sanitization:
+
+```bash
+metadata-scrubber ./file.pdf --out ./scrubbed --pdf-aggressive
 ```
 
 Dry run:
@@ -74,6 +85,14 @@ Examples folder:
 metadata-scrubber ./examples --out ./scrubbed
 ```
 
+Verify/report remaining metadata (best-effort):
+
+```bash
+metadata-verify ./PATH_TO_FILES
+metadata-verify ./PATH_TO_FILES --fail-on-metadata
+metadata-verify ./PATH_TO_FILES --json
+```
+
 ## Notes / Limitations
 
 - Metadata removal is best-effort and format-specific. There is no guarantee that *all* metadata is removed for every file.
@@ -82,7 +101,7 @@ metadata-scrubber ./examples --out ./scrubbed
 
 ## Roadmap
 
-If you want "more developed" beyond MVP, next upgrades would be adding more file types (e.g., videos), deeper PDF sanitization, and stronger "verification" commands (reporting remaining metadata).
+Potential next upgrades: more file types (for example HEIC), stronger PDF sanitization options, and richer verification output (including per-format summaries and stricter failure modes).
 
 ## License
 

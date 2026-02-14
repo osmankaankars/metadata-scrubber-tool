@@ -25,13 +25,17 @@ class RunOptions:
     strip_xattrs: bool = True
 
     normalize_zip_timestamps: bool = True
+    pdf_aggressive: bool = False
 
     backup_suffix: str = ".bak"
 
 
 def scrub_paths(paths: Iterable[Path], options: RunOptions) -> list[ScrubResult]:
     scrubbers = default_scrubbers()
-    scrubber_opts = ScrubOptions(normalize_zip_timestamps=options.normalize_zip_timestamps)
+    scrubber_opts = ScrubOptions(
+        normalize_zip_timestamps=options.normalize_zip_timestamps,
+        pdf_aggressive=options.pdf_aggressive,
+    )
 
     out_dir_resolved = None
     if options.out_dir is not None:

@@ -34,6 +34,11 @@ def main(
         "--normalize-zip-timestamps/--no-normalize-zip-timestamps",
         help="Normalize timestamps inside Office (OpenXML) zip packages",
     ),
+    pdf_aggressive: bool = typer.Option(
+        False,
+        "--pdf-aggressive/--no-pdf-aggressive",
+        help="More aggressive PDF sanitization (may remove bookmarks/forms/annotations)",
+    ),
     backup_suffix: str = typer.Option(
         ".bak",
         "--backup-suffix",
@@ -59,6 +64,7 @@ def main(
         preserve_perms=preserve_perms,
         strip_xattrs=strip_xattrs,
         normalize_zip_timestamps=normalize_zip_timestamps,
+        pdf_aggressive=pdf_aggressive,
         backup_suffix=backup_suffix,
     )
 

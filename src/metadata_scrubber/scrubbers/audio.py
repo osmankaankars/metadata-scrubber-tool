@@ -9,7 +9,7 @@ from .base import ScrubOptions, Scrubber
 class AudioScrubber(Scrubber):
     name = "audio"
 
-    _exts = {".mp3", ".flac", ".m4a", ".mp4", ".ogg"}
+    _exts = {".mp3", ".flac", ".m4a", ".ogg"}
 
     def can_handle(self, path: Path) -> bool:
         return path.suffix.lower() in self._exts

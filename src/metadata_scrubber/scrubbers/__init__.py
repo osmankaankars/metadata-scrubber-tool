@@ -3,10 +3,11 @@ from __future__ import annotations
 from .images import ImageScrubber
 from .openxml import OpenXmlScrubber
 from .pdf import PdfScrubber
+from .video import VideoScrubber
 
 
 def default_scrubbers():
-    scrubbers = [ImageScrubber(), PdfScrubber(), OpenXmlScrubber()]
+    scrubbers = [ImageScrubber(), PdfScrubber(), OpenXmlScrubber(), VideoScrubber()]
 
     # Optional scrubbers
     try:
