@@ -80,6 +80,10 @@ metadata-scrubber ./examples --out ./scrubbed
 - Content-level data (for example names inside a document body, revision history, embedded attachments, etc.) may still exist.
 - Always validate your output using the tools you trust for your target format.
 
+## Roadmap
+
+If you want "more developed" beyond MVP, next upgrades would be adding more file types (e.g., videos), deeper PDF sanitization, and stronger "verification" commands (reporting remaining metadata).
+
 ## License
 
 MIT. See `LICENSE`.
