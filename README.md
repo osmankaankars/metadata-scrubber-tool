@@ -31,6 +31,12 @@ pip install -e '.[audio]'
 Bir klasoru ciktiya scrub'layarak kopyalar (varsayilan):
 
 ```bash
+metadata-scrubber ./DOSYALARIN_OLDUGU_KLASOR --out ./scrubbed
+```
+
+Ornek (bu repodaki `ornekler/` klasoru):
+
+```bash
 metadata-scrubber ./ornekler --out ./scrubbed
 ```
 
