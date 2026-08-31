@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Add Python 3.10–3.12 CI with tests and focused lint checks.
+- Align author and license metadata with current Python packaging standards.
+
 ## 0.2.0 - 2026-02-14
 
 More file types and verification tooling.

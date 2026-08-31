@@ -1,6 +1,8 @@
 # Metadata Scrubber Tool
 
 [![CI](https://github.com/osmankaankars/metadata-scrubber-tool/actions/workflows/ci.yml/badge.svg)](https://github.com/osmankaankars/metadata-scrubber-tool/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/osmankaankars/metadata-scrubber-tool)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/osmankaankars/metadata-scrubber-tool)](https://github.com/osmankaankars/metadata-scrubber-tool/releases)
 
 A small CLI tool that removes metadata from common file types before you share them.
 
