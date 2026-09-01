@@ -52,6 +52,8 @@ Video scrubbing and video verification require `ffmpeg`/`ffprobe`.
 ## Usage
 
 Default mode is copy-mode: it writes scrubbed copies into an output directory and does not modify your originals.
+By default, output files retain the source file's filesystem access/modification timestamps and
+permissions. Use `--no-preserve-times` when those timestamps are sensitive.
 
 ```bash
 metadata-scrubber ./PATH_TO_FILES --out ./scrubbed
@@ -98,6 +100,10 @@ metadata-verify ./PATH_TO_FILES --json
 ## Notes / Limitations
 
 - Metadata removal is best-effort and format-specific. There is no guarantee that *all* metadata is removed for every file.
+- PDF page annotations are reported as remaining metadata because comments can contain author names,
+  text, and timestamps. Standard PDF mode preserves annotations; `--pdf-aggressive` removes them.
+- `metadata-verify` checks format-embedded metadata. It does not inspect filesystem timestamps,
+  permissions, or extended attributes.
 - Content-level data (for example names inside a document body, revision history, embedded attachments, etc.) may still exist.
 - Always validate your output using the tools you trust for your target format.
 

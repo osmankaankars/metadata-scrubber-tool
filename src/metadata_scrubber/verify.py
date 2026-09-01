@@ -13,6 +13,7 @@ from typing import Any, Iterable
 from defusedxml import ElementTree as DefusedET
 from PIL import ExifTags, Image
 from pypdf import PdfReader
+from pypdf.generic import ArrayObject
 
 
 class VerifyStatus(str, Enum):
@@ -162,16 +163,18 @@ def _verify_pdf(path: Path) -> VerifyResult:
 
     page_pieceinfo = 0
     page_annots = 0
-    try:
-        for page in r.pages:
-            if "/PieceInfo" in page:
-                page_pieceinfo += 1
-            if "/Annots" in page:
-                page_annots += 1
-    except Exception:
-        pass
+    for page in r.pages:
+        if "/PieceInfo" in page:
+            page_pieceinfo += 1
+        if "/Annots" in page:
+            annots = page["/Annots"]
+            if hasattr(annots, "get_object"):
+                annots = annots.get_object()
+            if not isinstance(annots, ArrayObject):
+                raise ValueError("Unable to inspect PDF page annotations")
+            page_annots += len(annots)
 
-    found = bool(md_keys) or has_root_metadata or page_pieceinfo > 0
+    found = bool(md_keys) or has_root_metadata or page_pieceinfo > 0 or page_annots > 0
     status = VerifyStatus.METADATA_FOUND if found else VerifyStatus.CLEAN
 
     details = {
